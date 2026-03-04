@@ -1,0 +1,68 @@
+Name: Om Borda
+Adresse: Leo-Weismantel-Str. 1C, 97074 Würzburg
+E-Mail: omborda2002@gmail.com
+Telefon: +49 155 603 43000
+Portfolio: https://omborda.dev
+LinkedIn: https://linkedin.com/in/omborda
+GitHub: https://github.com/omborda2002
+
+ZUSAMMENFASSUNG
+Software- und ML-Engineer mit über 2 Jahren Erfahrung in der produktiven Softwareentwicklung, aktuell mit klarem Fokus auf Machine Learning und KI-Systeme. Erfahrung im Aufbau von Empfehlungssystemen, NLP/LLM-Pipelines und Embeddings im produktiven Unternehmensumfeld (Axinity). Kenntnisse in Python, PyTorch, Node.js sowie AWS und Docker. Masterstudium Künstliche Intelligenz (THWS, Würzburg). Vollzeit verfügbar.
+
+AUSBILDUNG
+Technische Hochschule Würzburg-Schweinfurt (THWS)
+Master of Science in Künstlicher Intelligenz
+März 2025 – Heute
+
+Gujarat Technological University
+Bachelor of Computer Science & Engineering
+Juli 2020 – Mai 2024
+Notendurchschnitt: 1,4 (deutsche Äquivalenz) | CGPA: 9,10 / 10 | Jahrgangsbester 2024
+
+BERUFSERFAHRUNG
+Machine Learning Engineer
+Axinity GmbH & Co. KG · Liketik · Werkstudent · Remote
+Potsdam, Deutschland
+Juli 2025 – Heute
+- Konzeption und Entwicklung eines 4-stufigen hybriden Empfehlungssystems mit LLMs und mehrsprachigen Embeddings zur automatisierten Produkt-Creator-Zuordnung
+- Aufbau und produktive Bereitstellung einer ML/NLP-Pipeline inkl. Feature Engineering, Ranking-Evaluierung und A/B-Tests
+- Integration OCR-basierter Videoanalyse zur Creator-Profilierung und automatisierten Content-Sicherheitsprüfung
+
+Full-Stack-Entwickler
+Greendotslab Software Solutions
+Gujarat, Indien
+Mai 2022 – Sept 2024
+- Entwicklung von 10+ Kunden-Webanwendungen mit Node.js und React, von der Konzeption bis zum produktiven Einsatz
+- Backend-Optimierung für 10+ Produktiv-Deployments durch Lastverteilung und modulare Architektur zur Reduktion von Latenz und Ausfallzeiten
+
+PROJEKTE
+Kaggle: Google Tunix Hack (Gemma) – NLP, LLM-Feinabstimmung (2026)
+- Feinabstimmung von Gemma 2B mit LoRA zur Generierung begründeter Antworten aus strukturierten Daten; Multi-Source-Trainingsdatensatz mit 4-Bit-Quantisierung für Inferenz auf Consumer-Hardware
+- Veröffentlichung eines vollständig reproduzierbaren Kaggle-Notebooks inkl. Trainings-Pipeline, Hyperparameter-Dokumentation und Evaluierungsergebnissen
+
+UAV Waterfowl Detection – Computer Vision, YOLOv8, Thermal Imagery (2025)
+- Training und Evaluation eines YOLOv8-Detektors auf thermalen UAV-Aufnahmen; 86,44% mAP@0,5 und 93,21% Precision auf 83 Testbildern mit 1.411 Ground-Truth-Annotationen
+- Vollständige CV-Pipeline inkl. thermaler Bildvorverarbeitung, Training mit AdamW/Early Stopping und automatisierter Evaluierung
+
+Medical Image XAI & Model Compression – XAI, Pruning, Quantisierung (2025)
+- Erklärbarkeitsanalyse eines ResNet18-Klassifikators zur Pneumonieerkennung mittels Grad-CAM und LIME
+- Modellkomprimierung eines MobileNetV2-Anomaliedetektors durch strukturiertes Pruning (40% Kanalsparsität) und INT8-Quantisierung – Modellgröße von 8,7 MB auf 4,4 MB reduziert (–49%)
+
+Blackjack-KI – Reinforcement Learning (Q-Learning, Monte-Carlo) (2025)
+- Training und Vergleich mehrerer RL-Agenten zur Annäherung an die mathematisch optimale Blackjack-Strategie
+- Systematische Auswertung von Konvergenzverhalten und Gewinnrate über Episoden
+
+Gebärdenspracherkennung – Computer Vision, CNN (2025)
+- Entwicklung und Training eines CNN-Klassifikators zur Echtzeit-Erkennung von Gebärdensprachgesten
+- Robuste Vorverarbeitungspipeline mit Datenaugmentation über 24 Gestenklassen
+
+KENNTNISSE
+ML / KI: Recommendation Systems, Ranking, NLP/LLMs, Embeddings, Transformers, CNNs, Reinforcement Learning, Object Detection (YOLOv8), XAI (Grad-CAM, LIME), Model Compression (Pruning, Quantisierung), LLM Fine-Tuning (LoRA), Hugging Face, PyTorch, scikit-learn, Pandas, NumPy
+
+MLOps / Deployment: ML/NLP-Pipelines, A/B-Tests, Feature Engineering, AWS (EC2, Lambda, S3), Docker, NGINX, Git
+
+Backend / Web: Node.js, Express, REST-APIs, WebSockets, JWT, PostgreSQL, MongoDB, React, Next.js
+
+SPRACHEN
+Englisch: C1 – Fließend (Arbeitssprache)
+Deutsch: B1 – Grundkenntnisse (CEFR), aktiv auf dem Weg zu B2

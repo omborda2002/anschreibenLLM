@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+python-dotenv
+langchain
+langchain-groq
+jinja2
+weasyprint
+python-multipart

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 210mm;
+    min-height: 297mm;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.55;
+    color: #1a1a1a;
+    background: white;
+  }
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 18mm 20mm 20mm 25mm;
+    position: relative;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #1e293b;
+    margin-bottom: 18px;
+  }
+
+  .header-left .name {
+    font-size: 18pt;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #0f172a;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .header-left .title-label {
+    font-size: 8.5pt;
+    font-weight: 400;
+    color: #64748b;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  .header-right {
+    text-align: right;
+    font-size: 8.5pt;
+    color: #444;
+    line-height: 1.8;
+  }
+
+  .header-right a {
+    color: #1e293b;
+    text-decoration: none;
+  }
+
+  .header-right a:hover {
+    text-decoration: underline;
+  }
+
+  /* ── RECIPIENT + DATE ── */
+  .recipient-date-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 22px;
+    margin-top: 4px;
+  }
+
+  .recipient {
+    font-size: 10.5pt;
+    line-height: 1.6;
+    color: #1a1a1a;
+  }
+
+  .recipient .company {
+    font-weight: 600;
+  }
+
+  .date {
+    font-size: 10.5pt;
+    color: #444;
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  /* ── SUBJECT ── */
+  .subject {
+    font-weight: 700;
+    font-size: 11pt;
+    margin-bottom: 18px;
+    padding-left: 11px;
+    border-left: 3px solid #1e293b;
+    line-height: 1.4;
+    color: #0f172a;
+  }
+
+  /* ── BODY ── */
+  .greeting { margin-bottom: 12px; }
+
+  .body p {
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    margin-bottom: 11px;
+    color: #1a1a1a;
+  }
+
+  .body p:last-child { margin-bottom: 0; }
+
+  .body strong {
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  /* ── CLOSING ── */
+  .closing { margin-top: 18px; }
+  .signature-name { margin-top: 6mm; font-weight: 700; font-size: 10.5pt; }
+
+  /* ── FOOTER ── */
+  .footer {
+    position: absolute;
+    bottom: 10mm;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 7.5pt;
+    color: #ccc;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header: Name + contact info -->
+  <div class="header">
+    <div class="header-left">
+      <div class="name">{{full_name}}</div>
+      <div class="title-label">Anschreiben</div>
+    </div>
+    <div class="header-right">
+      <div>{{street}}, {{city}}</div>
+      <div>{{phone}}</div>
+      <div><a href="mailto:{{email}}">{{email}}</a></div>
+      <div><a href="{{portfolio_full}}">{{portfolio}}</a></div>
+      <div><a href="{{github_full}}">{{github}}</a></div>
+      <div><a href="{{linkedin_full}}">{{linkedin}}</a></div>
+    </div>
+  </div>
+
+  <!-- Recipient + Date -->
+  <div class="recipient-date-row">
+    <div class="recipient">
+      <span class="company">{{company_name}}</span>
+    </div>
+    <div class="date">{{date}}</div>
+  </div>
+
+  <!-- Subject -->
+  <div class="subject">Bewerbung als {{role}}</div>
+
+  <!-- Letter -->
+  <div class="greeting">{{greeting}}</div>
+  <div class="body">{{letter_body}}</div>
+  <div class="closing">{{closing_phrase}}</div>
+  <div class="signature-name">{{full_name}}</div>
+
+  <div class="footer">1</div>
+</div>
+</body>
+</html>
