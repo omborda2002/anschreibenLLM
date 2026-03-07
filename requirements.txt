@@ -6,3 +6,4 @@ langchain-groq
 jinja2
 weasyprint
 python-multipart
+itsdangerous
