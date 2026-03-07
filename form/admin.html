@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feder — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0c0c0b; --surface:#141412; --border:#222220; --gold:#c8a96e; --gold-dim:#8a7048; --text:#f0ebe0; --muted:#6b6860; --danger:#e07070; --success:#70c090; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 20px; }
+  .wrapper { width:100%; max-width:520px; }
+  .header { text-align:center; margin-bottom:40px; }
+  .logo { font-family:'Playfair Display',serif; font-size:32px; font-weight:400; letter-spacing:0.04em; margin-bottom:6px; }
+  .logo span { color:var(--gold); }
+  .tagline { font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); }
+  .card { background:var(--surface); border:1px solid var(--border); padding:36px; }
+  .section-title { font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); margin-bottom:20px; }
+  .field-label { display:block; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+  .drop-zone { border:1px dashed var(--border); padding:36px 24px; text-align:center; cursor:pointer; transition:border-color 0.2s; position:relative; }
+  .drop-zone:hover, .drop-zone.dragover { border-color:var(--gold-dim); }
+  .drop-zone input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+  .drop-icon { font-size:28px; margin-bottom:12px; opacity:0.4; }
+  .drop-text { font-size:13px; color:var(--muted); line-height:1.6; }
+  .drop-text strong { color:var(--text); font-weight:400; }
+  .file-selected { font-size:12px; color:var(--gold); margin-top:10px; display:none; letter-spacing:0.05em; }
+  .divider { height:1px; background:var(--border); margin:28px 0; }
+  .cv-preview { background:var(--bg); border:1px solid var(--border); padding:16px; font-size:12px; color:var(--muted); line-height:1.7; max-height:180px; overflow-y:auto; white-space:pre-wrap; font-family:'DM Sans',sans-serif; }
+  .cv-preview-label { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .cv-chars { font-size:11px; color:#3a3a38; }
+  .btn-row { display:flex; justify-content:flex-end; gap:12px; margin-top:20px; align-items:center; }
+  .btn-upload { background:var(--gold); border:none; color:var(--bg); padding:13px 32px; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:500; transition:opacity 0.2s; }
+  .btn-upload:hover { opacity:0.88; }
+  .btn-upload:disabled { opacity:0.25; cursor:not-allowed; }
+  .btn-logout { background:transparent; border:1px solid var(--border); color:var(--muted); padding:13px 20px; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; text-decoration:none; display:inline-block; line-height:1; }
+  .btn-logout:hover { border-color:#333; color:var(--text); }
+  .msg { padding:12px 16px; font-size:13px; margin-top:16px; display:none; }
+  .msg.success { background:#0e1a12; border:1px solid #2a5a38; color:var(--success); }
+  .msg.error { background:#1a1010; border:1px solid #4a2020; color:var(--danger); }
+  .footer { margin-top:28px; text-align:center; font-size:11px; color:#3a3a38; letter-spacing:0.1em; }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+  <div class="header">
+    <div class="logo">Fe<span>d</span>er</div>
+    <div class="tagline">Admin Panel</div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Update CV</div>
+
+    <label class="field-label">Upload new CV file (.txt)</label>
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="fileInput" accept=".txt" />
+      <div class="drop-icon">📄</div>
+      <div class="drop-text">
+        <strong>Click to choose</strong> or drag & drop<br>
+        Plain text file only (.txt)
+      </div>
+      <div class="file-selected" id="fileSelected"></div>
+    </div>
+
+    <div class="msg" id="msg"></div>
+
+    <div class="btn-row">
+      <a href="/logout" class="btn-logout">Logout</a>
+      <button class="btn-upload" id="btnUpload" disabled onclick="uploadCV()">Upload CV →</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="cv-preview-label">
+      <label class="field-label" style="margin:0">Current CV</label>
+      <span class="cv-chars" id="cvChars"></span>
+    </div>
+    <div class="cv-preview" id="cvPreview">Loading…</div>
+  </div>
+</div>
+
+<div class="footer">PROVIDED BY OM BORDA</div>
+
+<script>
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const fileSelected = document.getElementById('fileSelected');
+  const btnUpload = document.getElementById('btnUpload');
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) {
+      fileSelected.textContent = '✓ ' + fileInput.files[0].name;
+      fileSelected.style.display = 'block';
+      btnUpload.disabled = false;
+    }
+  });
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.name.endsWith('.txt')) {
+      fileInput.files = e.dataTransfer.files;
+      fileSelected.textContent = '✓ ' + file.name;
+      fileSelected.style.display = 'block';
+      btnUpload.disabled = false;
+    }
+  });
+
+  async function uploadCV() {
+    const file = fileInput.files[0];
+    if (!file) return;
+    const fd = new FormData();
+    fd.append('file', file);
+    btnUpload.disabled = true;
+    showMsg('', '');
+    try {
+      const res = await fetch('/admin/upload-cv', { method: 'POST', body: fd });
+      const text = await res.text();
+      if (res.ok) {
+        showMsg('CV updated successfully. All future generations will use the new CV.', 'success');
+        loadPreview();
+      } else {
+        showMsg(text || 'Upload failed.', 'error');
+      }
+    } catch {
+      showMsg('Network error. Please try again.', 'error');
+    } finally {
+      btnUpload.disabled = false;
+    }
+  }
+
+  function showMsg(text, type) {
+    const el = document.getElementById('msg');
+    el.textContent = text;
+    el.className = 'msg ' + type;
+    el.style.display = text ? 'block' : 'none';
+  }
+
+  async function loadPreview() {
+    try {
+      const res = await fetch('/admin/cv-preview');
+      const text = await res.text();
+      document.getElementById('cvPreview').textContent = text;
+      document.getElementById('cvChars').textContent = text.length.toLocaleString() + ' chars';
+    } catch {
+      document.getElementById('cvPreview').textContent = 'Could not load preview.';
+    }
+  }
+
+  loadPreview();
+</script>
+
+</body>
+</html>

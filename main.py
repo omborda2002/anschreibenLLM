@@ -4,8 +4,8 @@ import time
 import secrets
 import hashlib
 from collections import defaultdict
-from fastapi import FastAPI, Form, Request
-from fastapi.responses import Response, HTMLResponse, RedirectResponse
+from fastapi import FastAPI, Form, Request, UploadFile, File
+from fastapi.responses import Response, HTMLResponse, RedirectResponse, PlainTextResponse
 from pathlib import Path
 from starlette.middleware.sessions import SessionMiddleware
 from app.config import load_personal_info, load_cv
@@ -116,6 +116,36 @@ async def login(request: Request, password: str = Form(...)):
 async def logout(request: Request):
     request.session.clear()
     return RedirectResponse("/login", status_code=302)
+
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_page(request: Request):
+    if not is_authenticated(request):
+        return RedirectResponse("/login", status_code=302)
+    with open(BASE_DIR / "form" / "admin.html", "r", encoding="utf-8") as f:
+        return f.read()
+
+
+@app.get("/admin/cv-preview", response_class=PlainTextResponse)
+async def cv_preview(request: Request):
+    if not is_authenticated(request):
+        return PlainTextResponse("Unauthorized", status_code=401)
+    cv_path = BASE_DIR / "config" / "cv.txt"
+    return cv_path.read_text(encoding="utf-8")
+
+
+@app.post("/admin/upload-cv")
+async def upload_cv(request: Request, file: UploadFile = File(...)):
+    if not is_authenticated(request):
+        return PlainTextResponse("Unauthorized", status_code=401)
+    if not file.filename.endswith(".txt"):
+        return PlainTextResponse("Only .txt files are allowed.", status_code=400)
+    content = await file.read()
+    if len(content) > 500_000:  # 500 KB sanity limit
+        return PlainTextResponse("File too large. Max 500 KB.", status_code=400)
+    cv_path = BASE_DIR / "config" / "cv.txt"
+    cv_path.write_bytes(content)
+    return PlainTextResponse("OK")
 
 
 @app.get("/", response_class=HTMLResponse)
