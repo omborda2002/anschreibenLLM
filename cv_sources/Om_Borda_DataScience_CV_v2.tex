@@ -1,0 +1,177 @@
+%!TEX program = xelatex
+\documentclass[a4paper,10pt]{article}
+
+% ----- Packages -----
+\usepackage[left=0.52in, right=0.52in, top=0.38in, bottom=0.32in]{geometry}
+\usepackage{fontspec}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{microtype}
+
+% ----- Fonts -----
+\setmainfont[
+  BoldFont      = {texgyreheros-bold.otf},
+  ItalicFont    = {texgyreheros-italic.otf},
+  BoldItalicFont= {texgyreheros-bolditalic.otf}
+]{texgyreheros-regular.otf}
+
+\newfontfamily\namefont[
+  BoldFont = {texgyreadventor-bold.otf}
+]{texgyreadventor-regular.otf}
+
+% ----- Colors -----
+\definecolor{accent}{RGB}{0, 107, 107}
+\definecolor{dimgray}{RGB}{100, 100, 100}
+
+% ----- Hyperlinks -----
+\hypersetup{colorlinks=true, urlcolor=accent, linkcolor=accent}
+\newcommand{\ulink}[2]{\href{#1}{\textcolor{accent}{\underline{#2}}}}
+\newcommand{\extlink}{$\nearrow$}
+
+% ----- Bullet: small teal square -----
+\renewcommand{\labelitemi}{%
+  \raisebox{0.18ex}{\textcolor{accent}{\fontsize{5.5}{5.5}\selectfont$\blacksquare$}}%
+}
+
+% ----- List spacing -----
+\setlist[itemize]{
+  leftmargin = 1.25em,
+  topsep     = 3pt,
+  itemsep    = 2.5pt,
+  parsep     = 0pt
+}
+
+% ----- Linespread -----
+\linespread{0.94}\selectfont
+
+% ----- No paragraph indent -----
+\setlength{\parindent}{0pt}
+
+% ----- Section heading: filled teal box, white uppercase -----
+\newcommand{\cvsection}[1]{%
+  \par\vspace{7pt}\noindent%
+  {\setlength{\fboxsep}{4.5pt}%
+   \colorbox{accent}{\makebox[\dimexpr\textwidth-2\fboxsep\relax][l]{%
+     \color{white}\fontsize{8.8}{8.8}\selectfont\bfseries\MakeUppercase{#1}%
+   }}}%
+  \par\vspace{5pt}%
+}
+
+% ----- Entry commands -----
+\newcommand{\jobtitle}[2]{%
+  \noindent{\bfseries #1}\hfill{\color{accent}\small #2}\par\vspace{1pt}%
+}
+\newcommand{\jobmeta}[1]{%
+  \noindent{\color{accent}\small\textit{#1}}\par\vspace{1.5pt}%
+}
+
+\pagestyle{empty}
+
+\begin{document}
+
+% ===== HEADER =====
+\noindent
+\begin{minipage}[c]{0.73\textwidth}
+  {\namefont\fontsize{26}{30}\selectfont\bfseries Om Borda}\par
+  \vspace{4pt}
+  {\color{accent}\rule{0.42\textwidth}{1.0pt}}\par
+  \vspace{4pt}
+  {\small\color{dimgray}
+    Leo-Weismantel-Stra\ss{}e 1c, 97074 W\"{u}rzburg, Germany
+    \enspace\textbar\enspace Born 28.12.2002
+  }\par
+  \vspace{3pt}
+  {\small
+    \ulink{tel:+4915560343000}{+49 155 6034 3000}
+    \,$\cdot$\,
+    \ulink{mailto:omborda2002@gmail.com}{omborda2002@gmail.com}
+    \\[2.5pt]
+    \ulink{https://linkedin.com/in/omborda}{linkedin.com/in/omborda}
+    \,$\cdot$\,
+    \ulink{https://github.com/omborda2002}{github.com/omborda2002}
+    \,$\cdot$\,
+    \ulink{http://omborda2002.showdata.online/}{omborda2002.showdata.online}
+  }
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.23\textwidth}
+  \flushright
+  \includegraphics[width=2.9cm,height=3.6cm,keepaspectratio]{profile_photo.png}
+\end{minipage}
+
+\vspace{4pt}
+
+% ===== PROFILE =====
+\cvsection{Profile}
+Data Scientist with three years of professional experience in machine learning, statistical modelling, and data analysis. Builds data-driven predictive models across the full pipeline: feature engineering, model training, evaluation, and deployment to production. MSc Artificial Intelligence candidate at THWS. Available for full-time Data Science roles.
+
+% ===== EXPERIENCE =====
+\cvsection{Experience}
+
+\jobtitle{Werkstudent AI/ML Engineer}{Jul 2025 -- Present}
+\jobmeta{LikeTik (Axinity GmbH \& Co. KG) \enspace\textbar\enspace W\"{u}rzburg, Germany}
+\begin{itemize}
+  \item Built and evaluated a hybrid recommendation model matching around one million supplier products to thousands of TikTok creators, using multilingual embeddings, Qdrant vector search, metadata filtering, and an LLM re-ranking layer; achieved \textbf{0.42 Precision@5} on manually reviewed matches, a \textbf{31\%} gain over the embedding-only baseline.
+  \item Engineered a computer vision and NLP content-analysis pipeline (Qwen-VL, PyTesseract OCR) extracting visual signals and on-frame text as features for the recommendation model.
+  \item Deployed models as FastAPI services on Kubernetes (Docker, Hetzner, GPU, PostgreSQL), covering MLOps and data pipeline orchestration end to end.
+\end{itemize}
+
+\vspace{4pt}
+\jobtitle{Data Analytics \& Machine Learning Engineer}{Jun 2023 -- Feb 2025}
+\jobmeta{Bigscal Technologies Pvt. Ltd., Gujarat, India}
+\begin{itemize}
+  \item Built a customer-churn prediction model (Python, pandas, scikit-learn, XGBoost) with feature engineering on activity trends, session duration, failed-payment ratio, and support-ticket frequency; achieved \textbf{0.86 ROC-AUC} and identified \textbf{72\%} of churn cases in the top 30\% highest-risk segment.
+  \item Built a sales-analytics and forecasting dashboard (Streamlit, KPI cards, regional heatmaps, regression-based monthly forecasts, product-level breakdowns), cutting weekly manual reporting from \textbf{6 hours} to \textbf{under 1 hour}.
+\end{itemize}
+
+\vspace{4pt}
+\jobtitle{Full Stack Developer}{May 2022 -- Jun 2023}
+\jobmeta{Greendotslab Software Solutions, Gujarat, India \enspace\textbar\enspace Node.js, React}
+
+% ===== PROJECTS =====
+\cvsection{Projects}
+
+\noindent
+{\bfseries \ulink{https://github.com/omborda2002/medical-image-xai-and-model-compression}{Medical Image XAI \& Model Compression \extlink}}%
+\enspace{\small\color{dimgray}|\enspace PyTorch, ResNet18, MobileNetV2, Grad-CAM, LIME}
+\begin{itemize}
+  \item Fine-tuned ResNet18 for pneumonia detection on chest X-rays; applied Grad-CAM and LIME for explainability. Compressed a MobileNetV2 variant via structured pruning and INT8 quantisation from 8.7 MB to \textbf{4.4 MB} (\textbf{49\%} reduction).
+\end{itemize}
+
+\vspace{3pt}
+\noindent
+{\bfseries \ulink{https://equity.showdata.online}{Stock Research Agent \extlink}}%
+\enspace{\small\color{dimgray}|\enspace RAG, Qdrant, LangGraph, LangChain, sentiment analysis}
+\begin{itemize}
+  \item Built an equity-research system using RAG over SEC 10-K/10-Q filings, real-time news-sentiment analysis across six global exchanges, and a self-correcting critic step with confidence gating before final output.
+\end{itemize}
+
+% ===== EDUCATION =====
+\cvsection{Education}
+
+\jobtitle{Technische Hochschule W\"{u}rzburg-Schweinfurt (THWS)}{Mar 2025 -- Jan 2027 (expected)}
+\jobmeta{Master of Science in Artificial Intelligence}
+\begin{itemize}
+  \item Thesis: \textit{Security Failure Propagation in Multi-Agent Coding Systems} (May 2026), supervised by Prof.\ Dr.\ Ivan Yamshchikov. Evaluates secret and PII leakage across coder, tester, and reviewer agents in a LangGraph pipeline via a four-layer guard ensemble (gitleaks, TruffleHog, Microsoft Presidio, LLM-as-judge).
+\end{itemize}
+
+\vspace{3pt}
+\jobtitle{Gujarat Technological University}{Jul 2020 -- May 2024}
+{\small\textit{Bachelor of Computer Science \& Engineering}\hfill GPA 9.10/10 (German equivalent: 1.4)}
+
+% ===== SKILLS =====
+\cvsection{Skills}
+\vspace{2pt}
+\begin{tabularx}{\textwidth}{@{}p{3.8cm} X@{}}
+\textbf{Areas}               & Deep Learning, NLP, Computer Vision, Generative AI, MLOps, Recommendation Systems \\[2pt]
+\textbf{Stats \& Modelling}  & Feature engineering, regression, classification, time-series forecasting, gradient boosting, hypothesis testing, A/B testing, model evaluation \\[2pt]
+\textbf{ML / LLM}            & PyTorch, scikit-learn, XGBoost, Hugging Face Transformers, PEFT (LoRA), RAG, LangChain, LangGraph, Qdrant, embeddings \\[2pt]
+\textbf{Data \& Viz}         & Python, SQL, pandas, NumPy, Streamlit, matplotlib, seaborn, data visualization \\[2pt]
+\textbf{Infra \& Backend}    & Docker, Kubernetes, FastAPI, AWS, Azure, PostgreSQL, Supabase, Git \\[2pt]
+\textbf{Languages}           & English (C1), German (B2) \\
+\end{tabularx}
+
+\end{document}

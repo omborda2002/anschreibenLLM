@@ -162,6 +162,7 @@ async def generate(
     job_posting: str = Form(...),
     language: str = Form("DE"),
     tone: str = Form("formal"),
+    cv_variant: str = Form("aiml"),
 ):
     if not is_authenticated(request):
         return RedirectResponse("/login", status_code=302)
@@ -176,7 +177,7 @@ async def generate(
         )
 
     personal_info = load_personal_info()
-    cv_text = load_cv()
+    cv_text = load_cv(cv_variant)
 
     result = generate_all(
         personal_info=personal_info,

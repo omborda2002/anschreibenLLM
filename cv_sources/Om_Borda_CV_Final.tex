@@ -1,0 +1,158 @@
+%!TEX program = xelatex
+\documentclass[a4paper,10pt]{article}
+
+% ----- Packages -----
+\usepackage[margin=0.45in, top=0.32in, bottom=0.25in]{geometry}
+\usepackage{fontspec}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+% ----- Font Setup -----
+\setmainfont{Latin Modern Roman}
+
+% ----- Define heading color (navy blue) -----
+\definecolor{headingcolor}{RGB}{38, 83, 128}
+
+% ----- Hyperlink Style -----
+\hypersetup{
+  colorlinks=true,
+  urlcolor=black,
+  linkcolor=black,
+}
+
+\newcommand{\ulink}[2]{\href{#1}{\textcolor{black}{\underline{#2}}}}
+
+% ----- Section Formatting -----
+\titleformat{\section}
+  {\large\bfseries\scshape\color{headingcolor}}
+  {}
+  {0em}
+  {}
+  [\vspace{-0.7em}{\color{headingcolor}\rule{\textwidth}{0.4pt}}]
+
+\titlespacing{\section}{0pt}{4pt}{1pt}
+
+\pagestyle{empty}
+
+\setlist[itemize]{leftmargin=1.5em, topsep=2pt, itemsep=0pt, parsep=0pt}
+
+\linespread{0.90}\selectfont
+
+\newcommand{\extlink}{$\nearrow$}
+\newcommand{\jobtitle}[1]{{\color{headingcolor}\textbf{#1}}}
+
+\begin{document}
+
+% ===== HEADER WITH PHOTO =====
+\noindent
+\begin{minipage}[c]{0.74\textwidth}
+{\fontsize{26}{30}\selectfont\bfseries\color{headingcolor}\scshape Om Borda}\\[4pt]
+{\small Leo-Weismantel-Stra\ss{}e 1c, 97074 W\"{u}rzburg, Germany \hspace{1em}\textbar\hspace{1em} Born 28.12.2002}\\[4pt]
+{\small
+  \ulink{tel:+4915560343000}{+49 155 6034 3000}
+  \,$\cdot$\,
+  \ulink{mailto:omborda2002@gmail.com}{omborda2002@gmail.com}\\[2pt]
+  \ulink{https://linkedin.com/in/omborda}{linkedin.com/in/omborda}
+  \,$\cdot$\,
+  \ulink{https://github.com/omborda2002}{github.com/omborda2002}
+  \,$\cdot$\,
+  \ulink{http://omborda2002.showdata.online/}{omborda2002.showdata.online}
+}
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.24\textwidth}
+\flushright
+\includegraphics[width=3.0cm,height=3.7cm,keepaspectratio]{profile_photo.png}
+\end{minipage}
+
+\vspace{2pt}
+
+% ===== PROFILE =====
+\section*{PROFILE}
+\noindent
+AI/ML Engineer with three years of professional experience in deep learning, NLP, and generative AI. Writing a Master's thesis at THWS on security failure propagation in multi-agent coding systems; Werkstudent AI/ML Engineer at LikeTik (Axinity GmbH) building production recommendation and content-analysis pipelines. Available for full-time roles.
+
+% ===== EXPERIENCE =====
+\section*{EXPERIENCE}
+
+\noindent
+\jobtitle{Werkstudent AI/ML Engineer} \hfill \textbf{Jul 2025 to Present}\\
+\textit{\underline{LikeTik (Axinity GmbH \& Co. KG)}} \hfill \textit{W\"{u}rzburg, Germany}
+\begin{itemize}
+  \item Built a hybrid recommendation system matching around one million supplier products to thousands of TikTok creators, using multilingual embeddings, Qdrant vector search, metadata filtering, and an LLM re-ranking layer that returns the top five product suggestions per creator.
+  \item Built a video content-analysis pipeline using computer vision (Qwen-VL) for visual scene understanding and PyTesseract for on-frame text extraction, feeding extracted signals back into the recommendation features.
+  \item Handled MLOps end to end: Dockerised services on Hetzner with Kubernetes for scaling, FastAPI for the backend API layer, model serving on Trooper.ai (A100 40GB) for a self-hosted Qwen 7B, and PostgreSQL for metadata.
+\end{itemize}
+
+\vspace{1pt}
+\noindent
+\jobtitle{Data Analytics \& Machine Learning Engineer} \hfill \textbf{Jun 2023 to Feb 2025}\\
+\textit{\underline{Bigscal Technologies Pvt. Ltd.}, Gujarat, India}
+\begin{itemize}
+  \item Built a customer churn prediction pipeline for a subscription platform in Python with pandas, scikit-learn, and XGBoost, including feature engineering on activity trends, session duration, failed payment ratio, and support-ticket frequency, with weekly retraining on fresh data.
+  \item Developed a sales analytics and forecasting dashboard in Streamlit covering KPI cards, regional heatmaps, regression-based monthly forecasts, and product-level breakdowns, consolidating data previously spread across Excel sheets and client databases.
+\end{itemize}
+
+\vspace{1pt}
+\noindent
+\jobtitle{Full Stack Developer} \hfill \textbf{May 2022 to Jun 2023}\\
+\textit{\underline{Greendotslab Software Solutions}} \hfill \textit{Gujarat, India \hspace{0.5em}\textbar\hspace{0.5em} Node.js, React}
+
+% ===== PROJECTS =====
+\section*{PROJECTS}
+
+\noindent
+\jobtitle{\ulink{https://equity.showdata.online}{Stock Research Agent \extlink}}
+\ |\ \textit{\textbf{LangGraph, LangChain, Groq, Qdrant, Supabase, FastAPI, Next.js}}
+\begin{itemize}
+  \item Designed and deployed a five-node LangGraph pipeline that produces equity research reports across six global exchanges, using RAG over SEC 10-K and 10-Q filings via Qdrant hybrid search, real-time news sentiment, and a self-correcting Critic Agent with confidence gating before final output.
+\end{itemize}
+
+\vspace{2pt}
+\noindent
+\jobtitle{\ulink{https://www.kaggle.com/competitions/google-tunix-hackathon/writeups/new-writeup-1767829089071}{Gemma-2B Reasoning Model \extlink}}
+\ |\ \textit{\textbf{PyTorch, Gemma 2B, LoRA, bitsandbytes, Transformers}}
+\begin{itemize}
+  \item Co-developed a reasoning-tuned Gemma-2B for the Google Tunix Hackathon (team of three), owning the inference pipeline. Fine-tuned with LoRA (rank 32, alpha 64) on around 570k samples from MetaMath, OpenThoughts, Medical-O1, Bespoke-Stratos, and GSM8K, with 4-bit NF4 quantisation.
+\end{itemize}
+
+\vspace{2pt}
+\noindent
+\jobtitle{\ulink{https://github.com/omborda2002/medical-image-xai-and-model-compression}{Medical Image XAI \& Model Compression \extlink}}
+\ |\ \textit{\textbf{PyTorch, ResNet18, MobileNetV2, Grad-CAM, LIME}}
+\begin{itemize}
+  \item Fine-tuned ResNet18 for pneumonia detection on chest X-rays and added Grad-CAM and LIME to surface the regions driving each prediction. Compressed a MobileNetV2 variant via structured pruning and INT8 quantisation, from 8.7 MB to 4.4 MB (49\% reduction).
+\end{itemize}
+
+% ===== EDUCATION =====
+\section*{EDUCATION}
+
+\noindent
+\jobtitle{Technische Hochschule W\"{u}rzburg-Schweinfurt (THWS)} \hfill \textit{Mar 2025 to Jan 2027 (expected)}\\
+\textit{Master of Science in Artificial Intelligence}
+\begin{itemize}
+  \item Master's thesis: \textit{Security Failure Propagation in Multi-Agent Coding Systems} (start May 2026), supervised by Prof. Dr. Ivan Yamshchikov. Measures how secret and PII leakage propagates across coder, tester, and reviewer agents in a LangGraph pipeline, and evaluates a four-layer guard ensemble (gitleaks, TruffleHog, Microsoft Presidio, LLM-as-judge).
+\end{itemize}
+
+\vspace{2pt}
+\noindent
+\jobtitle{Gujarat Technological University} \hfill \textit{Jul 2020 to May 2024}\\
+\textit{Bachelor of Computer Science \& Engineering} \hfill GPA 9.10/10 (German equivalent: 1.4)
+
+% ===== SKILLS =====
+\section*{SKILLS}
+\vspace{1pt}
+\noindent
+\begin{tabularx}{\textwidth}{@{}l X@{}}
+\textbf{Areas} & Deep Learning, NLP, Computer Vision, Generative AI, MLOps, Recommendation Systems \\
+\textbf{ML / LLM} & PyTorch, NumPy, scikit-learn, XGBoost, Hugging Face Transformers, PEFT (LoRA), bitsandbytes, LangChain, LangGraph, RAG, Qdrant, multilingual embeddings \\
+\textbf{Vision \& OCR} & PyTesseract, Qwen-VL, ResNet, MobileNet, Grad-CAM, LIME \\
+\textbf{Infra \& Backend} & Docker, Kubernetes, FastAPI, AWS, Azure, Hetzner, Trooper.ai (GPU), PostgreSQL, Supabase, REST APIs, Git \\
+\textbf{Languages} & Python, SQL, JavaScript / TypeScript ; English (C1), German (B2) \\
+\end{tabularx}
+
+\end{document}

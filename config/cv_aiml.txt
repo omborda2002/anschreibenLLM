@@ -1,0 +1,52 @@
+CV VARIANT: AI/ML Engineer (use for AI, ML, Deep Learning, NLP, LLM, Generative AI, Computer Vision, MLOps roles)
+
+Name: Om Borda
+Born: 28.12.2002
+Address: Leo-Weismantel-Straße 1c, 97074 Würzburg, Germany
+Phone: +49 155 6034 3000
+Email: omborda2002@gmail.com
+LinkedIn: linkedin.com/in/omborda
+GitHub: github.com/omborda2002
+Portfolio: omborda2002.showdata.online
+
+PROFILE
+AI/ML Engineer with three years of professional experience in deep learning, NLP, and generative AI. Writing a Master's thesis at THWS on security failure propagation in multi-agent coding systems. Werkstudent AI/ML Engineer at LikeTik (Axinity GmbH) building production recommendation and content-analysis pipelines. Available for full-time roles.
+
+EXPERIENCE
+
+Werkstudent AI/ML Engineer — LikeTik (Axinity GmbH & Co. KG), Würzburg, Germany (Jul 2025 to Present)
+- Built a hybrid recommendation system matching around one million supplier products to thousands of TikTok creators, using multilingual embeddings, Qdrant vector search, metadata filtering, and an LLM re-ranking layer that returns the top five product suggestions per creator.
+- Built a video content-analysis pipeline using computer vision (Qwen-VL) for visual scene understanding and PyTesseract for on-frame text extraction, feeding extracted signals back into the recommendation features.
+- Handled MLOps end to end: Dockerised services on Hetzner with Kubernetes for scaling, FastAPI for the backend API layer, model serving on Trooper.ai (A100 40GB) for a self-hosted Qwen 7B, and PostgreSQL for metadata.
+
+Data Analytics & Machine Learning Engineer — Bigscal Technologies Pvt. Ltd., Gujarat, India (Jun 2023 to Feb 2025)
+- Built a customer churn prediction pipeline for a subscription platform in Python with pandas, scikit-learn, and XGBoost, including feature engineering on activity trends, session duration, failed payment ratio, and support-ticket frequency, with weekly retraining on fresh data.
+- Developed a sales analytics and forecasting dashboard in Streamlit covering KPI cards, regional heatmaps, regression-based monthly forecasts, and product-level breakdowns, consolidating data previously spread across Excel sheets and client databases.
+
+Full Stack Developer — Greendotslab Software Solutions, Gujarat, India (May 2022 to Jun 2023)
+- Built client web applications with Node.js and React.
+
+PROJECTS
+
+Stock Research Agent (LangGraph, LangChain, Groq, Qdrant, Supabase, FastAPI, Next.js)
+- Designed and deployed a five-node LangGraph pipeline that produces equity research reports across six global exchanges, using RAG over SEC 10-K and 10-Q filings via Qdrant hybrid search, real-time news sentiment, and a self-correcting Critic Agent with confidence gating before final output.
+
+Gemma-2B Reasoning Model (PyTorch, Gemma 2B, LoRA, bitsandbytes, Transformers)
+- Co-developed a reasoning-tuned Gemma-2B for the Google Tunix Hackathon (team of three), owning the inference pipeline. Fine-tuned with LoRA (rank 32, alpha 64) on around 570k samples from MetaMath, OpenThoughts, Medical-O1, Bespoke-Stratos, and GSM8K, with 4-bit NF4 quantisation.
+
+Medical Image XAI & Model Compression (PyTorch, ResNet18, MobileNetV2, Grad-CAM, LIME)
+- Fine-tuned ResNet18 for pneumonia detection on chest X-rays and added Grad-CAM and LIME to surface the regions driving each prediction. Compressed a MobileNetV2 variant via structured pruning and INT8 quantisation, from 8.7 MB to 4.4 MB (49% reduction).
+
+EDUCATION
+
+Technische Hochschule Würzburg-Schweinfurt (THWS) — Master of Science in Artificial Intelligence (Mar 2025 to Jan 2027 expected)
+- Master's thesis: Security Failure Propagation in Multi-Agent Coding Systems (start May 2026), supervised by Prof. Dr. Ivan Yamshchikov. Measures how secret and PII leakage propagates across coder, tester, and reviewer agents in a LangGraph pipeline, and evaluates a four-layer guard ensemble (gitleaks, TruffleHog, Microsoft Presidio, LLM-as-judge).
+
+Gujarat Technological University — Bachelor of Computer Science & Engineering (Jul 2020 to May 2024), GPA 9.10/10 (German equivalent: 1.4)
+
+SKILLS
+Areas: Deep Learning, NLP, Computer Vision, Generative AI, MLOps, Recommendation Systems
+ML / LLM: PyTorch, NumPy, scikit-learn, XGBoost, Hugging Face Transformers, PEFT (LoRA), bitsandbytes, LangChain, LangGraph, RAG, Qdrant, multilingual embeddings
+Vision & OCR: PyTesseract, Qwen-VL, ResNet, MobileNet, Grad-CAM, LIME
+Infra & Backend: Docker, Kubernetes, FastAPI, AWS, Azure, Hetzner, Trooper.ai (GPU), PostgreSQL, Supabase, REST APIs, Git
+Languages: Python, SQL, JavaScript / TypeScript; English (C1), German (B2)

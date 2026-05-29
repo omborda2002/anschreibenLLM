@@ -15,7 +15,7 @@
   .logo span { color:var(--gold); }
   .tagline { font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); }
   .card { background:var(--surface); border:1px solid var(--border); padding:36px; }
-  .row-toggles { display:flex; gap:24px; margin-bottom:28px; }
+  .row-toggles { display:flex; flex-wrap:wrap; gap:20px 24px; margin-bottom:28px; }
   .toggle-group { display:flex; flex-direction:column; gap:8px; }
   .toggle-label { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); }
   .toggles { display:flex; gap:6px; }
@@ -71,6 +71,13 @@
           <button class="toggle-btn" onclick="setToggle('tone','semi-formal',this)">Semi-Formal</button>
         </div>
       </div>
+      <div class="toggle-group">
+        <span class="toggle-label">CV</span>
+        <div class="toggles">
+          <button class="toggle-btn active" onclick="setToggle('cv_variant','aiml',this)">AI / ML</button>
+          <button class="toggle-btn" onclick="setToggle('cv_variant','ds',this)">Data Science</button>
+        </div>
+      </div>
     </div>
 
     <label class="field-label">Job Posting</label>
@@ -88,7 +95,7 @@
 <div class="footer">PROVIDED BY OM BORDA</div>
 
 <script>
-  const state = { language: 'DE', tone: 'formal' };
+  const state = { language: 'DE', tone: 'formal', cv_variant: 'aiml' };
   function setToggle(key, value, btn) {
     state[key] = value;
     btn.parentElement.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
@@ -104,6 +111,7 @@
     fd.append('job_posting', text);
     fd.append('language', state.language);
     fd.append('tone', state.tone);
+    fd.append('cv_variant', state.cv_variant);
     try {
       const res = await fetch('/generate', { method: 'POST', body: fd });
       if (!res.ok) throw new Error();
