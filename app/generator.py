@@ -57,6 +57,56 @@ def md_to_html_bold(text: str) -> str:
     return re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
 
 
+def _normalize_body(raw: str) -> str:
+    """Turn a raw letter body into clean paragraphs separated by blank lines.
+
+    The model is inconsistent: it may use the escape sequence \\n\\n, real line
+    breaks, or both. We unescape, split on blank lines, and collapse stray
+    single line breaks inside a paragraph into spaces so pdf.py (which splits on
+    "\\n\\n") always gets clean paragraphs.
+    """
+    raw = (raw.replace('\\n', '\n').replace('\\t', ' ')
+              .replace('\\"', '"').replace("\\'", "'").replace('\\\\', '\\'))
+    paras = [re.sub(r'\s*\n\s*', ' ', p).strip()
+             for p in re.split(r'\n\s*\n', raw) if p.strip()]
+    return '\n\n'.join(paras)
+
+
+def parse_letter_response(text: str) -> dict:
+    """Parse the model's JSON reliably, recovering from invalid JSON.
+
+    The model often emits real line breaks inside the letter_body string, which
+    makes the whole payload invalid JSON. Rather than dumping the raw JSON blob
+    into the PDF, we fall back to field-by-field extraction so the company, role
+    and letter still come through.
+    """
+    text = text.replace('```json', '').replace('```', '').strip()
+
+    try:
+        data = json.loads(text)
+        return {
+            'company_name': (data.get('company_name') or '').strip(),
+            'role': (data.get('role') or '').strip(),
+            'job_type': (data.get('job_type') or 'Vollzeit').strip(),
+            'letter_body': _normalize_body(data.get('letter_body', '')),
+        }
+    except (json.JSONDecodeError, AttributeError, TypeError):
+        pass
+
+    def grab(field: str) -> str:
+        m = re.search(r'"%s"\s*:\s*"(.*?)"' % field, text, re.S)
+        return m.group(1).strip() if m else ''
+
+    body_m = re.search(r'"letter_body"\s*:\s*"(.*)"\s*}?\s*$', text, re.S)
+    body = body_m.group(1) if body_m else text
+    return {
+        'company_name': grab('company_name') or 'Unbekanntes Unternehmen',
+        'role': grab('role') or 'Position',
+        'job_type': grab('job_type') or 'Vollzeit',
+        'letter_body': _normalize_body(body),
+    }
+
+
 def sanitize_humanized(text: str) -> str:
     """Deterministic safety net for the humanizer rules.
 
@@ -75,6 +125,34 @@ def sanitize_humanized(text: str) -> str:
     return text
 
 
+# Words the prompt bans but the model still leaks. Deleted words are dropped
+# outright; swapped words get a plainer synonym. Applied deterministically so
+# these AI tells never reach the PDF.
+_VOCAB_DELETE = ["seamlessly", "effortlessly", "holistically"]
+_VOCAB_SWAP = {
+    "seamless": "smooth", "cutting-edge": "advanced", "cutting edge": "advanced",
+    "robust": "reliable", "vibrant": "active", "groundbreaking": "novel",
+    "leverage": "use", "leveraging": "using", "leverages": "uses", "leveraged": "used",
+    "utilize": "use", "utilizing": "using", "utilizes": "uses", "utilized": "used",
+    "showcase": "show", "showcases": "shows", "showcasing": "showing", "showcased": "showed",
+    "delve into": "go into",
+}
+
+
+def scrub_ai_vocab(text: str) -> str:
+    """Remove/replace high-frequency AI-vocabulary words the model leaks."""
+    for w in _VOCAB_DELETE:
+        text = re.sub(r"\b" + re.escape(w) + r"\b", "", text, flags=re.I)
+    for a, b in _VOCAB_SWAP.items():
+        text = re.sub(r"\b" + re.escape(a) + r"\b", b, text, flags=re.I)
+    text = re.sub(r"\s+([.,;:])", r"\1", text)   # no space before punctuation
+    text = re.sub(r"[ \t]{2,}", " ", text)
+    # Recapitalise the first letter of each sentence (a swap may have lowered it)
+    text = re.sub(r"(^|[.!?]\s+|\n)([a-z])",
+                  lambda m: m.group(1) + m.group(2).upper(), text)
+    return text
+
+
 def generate_all(
     personal_info: dict,
     cv_text: str,
@@ -86,7 +164,7 @@ def generate_all(
     llm = ChatGroq(
         model="llama-3.3-70b-versatile",
         api_key=os.getenv("GROQ_API_KEY"),
-        temperature=0.8,
+        temperature=0.6,
     )
 
     if language == "DE":
@@ -105,6 +183,9 @@ VERBOTENE PHRASEN — diese dürfen NICHT vorkommen, nicht einmal sinngemäß:
 - "außergewöhnlich"
 - "ich freue mich darauf"
 - "meine Fähigkeiten und Erfahrungen"
+- "ich glaube"
+- "ein starker Kandidat" / "ein idealer Kandidat"
+- "um nur einige zu nennen"
 - Irgendwas mit "Passion" oder "Leidenschaft"
 """
         humanizer_rules = HUMANIZER_RULES_DE
@@ -124,6 +205,10 @@ BANNED PHRASES — must not appear, not even paraphrased:
 - "extraordinary"
 - "I look forward to"
 - "my skills and experience"
+- "I believe"
+- "strong candidate" / "ideal candidate" / "perfect candidate"
+- "to name a few"
+- "make me a strong fit" / "make me an ideal fit"
 - Anything with "passion"
 """
         humanizer_rules = HUMANIZER_RULES_EN
@@ -150,11 +235,14 @@ WRITING RULES:
 - Mention company name maximum ONCE
 - Never start 2 consecutive sentences with "Ich" or "I"
 - No bullet points
-- No padding sentences — every sentence must add value
+- LENGTH: each paragraph is 2 to 3 sentences. The whole letter stays under 200 words.
+- No padding sentences. Cut any sentence that only restates that something "worked", "produced results", "was successful", or "was completed on time". Cut "I was able to...", "this demonstrates my ability to...", "this showcases my expertise in...".
+- Do not reuse the same noun phrase twice (e.g. do not say "production-ready systems" or "large amounts of data" more than once).
 - Be specific: name actual projects, tools, numbers from the CV
-- Paragraph 1: what you bring technically (specific, concrete)
-- Paragraph 2: relevant project or experience that proves it
-- Paragraph 3: brief, forward-looking — one sentence on fit, one on next step
+- Anchor the letter to THIS posting: pick the 2-3 concrete requirements or technologies named in the job posting and answer them with real evidence from the CV. If the posting names a stack (e.g. TypeScript, a framework, a cloud, a model provider), reference the matching CV experience explicitly.
+- Paragraph 1: open with your single strongest, most specific match to this exact role — a real project, production system, or measurable result. Do NOT open with a generic summary like "I bring a strong foundation in...".
+- Paragraph 2: a concrete project or work result that proves you can do the core task in the posting (name the project, the tools, and a number or outcome).
+- Paragraph 3: brief, forward-looking — one sentence connecting your background to what the team is building, one sentence on the next step. No generic "I believe I am a strong candidate" wording.
 
 CV:
 {cv_text}
@@ -166,7 +254,10 @@ Degree: {degree}
 Job posting:
 {job_posting}
 
-Return ONLY valid JSON, no markdown, no code fences:
+Return ONLY valid JSON, no markdown, no code fences.
+CRITICAL: "letter_body" must be a SINGLE-LINE JSON string. Separate the three
+paragraphs ONLY with the two-character escape \\n\\n. Do NOT put real line
+breaks anywhere inside the JSON.
 {{
   "company_name": "...",
   "role": "...",
@@ -188,20 +279,8 @@ Return ONLY valid JSON, no markdown, no code fences:
         "job_posting": job_posting,
     })
 
-    text = response.content.strip()
-    text = text.replace("```json", "").replace("```", "").strip()
-
-    try:
-        data = json.loads(text)
-        data["letter_body"] = md_to_html_bold(sanitize_humanized(data.get("letter_body", "")))
-    except json.JSONDecodeError:
-        data = {
-            "company_name": "Unbekanntes Unternehmen",
-            "role": "Position",
-            "job_type": "Vollzeit",
-            "letter_body": md_to_html_bold(sanitize_humanized(text)),
-        }
-
+    data = parse_letter_response(response.content.strip())
+    data["letter_body"] = md_to_html_bold(scrub_ai_vocab(sanitize_humanized(data["letter_body"])))
     data["greeting"] = greeting
     data["closing_phrase"] = closing
     return data
